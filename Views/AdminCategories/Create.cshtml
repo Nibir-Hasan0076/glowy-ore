@@ -1,0 +1,46 @@
+@model CategoryFormViewModel
+@{
+    ViewData["Title"] = "New category";
+    ViewData["AdminTitle"] = "New category";
+    ViewData["ActiveAdmin"] = "categories";
+}
+
+<div class="admin-page-head">
+    <p>Give the collection a name, a short description and at least one picture.</p>
+    <div class="actions">
+        <a class="btn btn-ghost btn-sm" href="/admin/categories">← Back to categories</a>
+    </div>
+</div>
+
+<form class="admin-form" method="post" action="/admin/categories/create" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+
+    <div class="form-section">
+        <div class="form-section-head">
+            <h2>Details</h2>
+            <span>The name becomes the web address automatically.</span>
+        </div>
+        <partial name="_CategoryForm" model="Model" />
+    </div>
+
+    <div class="form-section">
+        <div class="form-section-head">
+            <h2>Pictures</h2>
+            <span>The first picture is used as the category icon.</span>
+        </div>
+
+        <label class="file-drop">
+            <input type="file" name="Images" multiple accept="image/*" data-file-input data-preview="#newCategoryImages" />
+            <span class="drop-icon">＋</span>
+            <strong>Drop images here or click to upload</strong>
+            <span>JPG, PNG, WEBP or GIF · up to 6 MB each · multiple allowed</span>
+        </label>
+        <span asp-validation-for="Images" class="text-danger"></span>
+        <div class="preview-grid" id="newCategoryImages"></div>
+    </div>
+
+    <div class="form-actions">
+        <button class="btn btn-primary" type="submit">Create category</button>
+        <a class="btn btn-ghost" href="/admin/categories">Cancel</a>
+    </div>
+</form>

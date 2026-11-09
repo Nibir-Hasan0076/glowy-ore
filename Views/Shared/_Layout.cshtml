@@ -1,0 +1,151 @@
+﻿@inject GlowyOre.Services.CartService Cart
+@{
+    var cartCount = Cart.Count;
+    var toast = TempData["Toast"] as string;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="GLOWY ORE — handcrafted ornaments, delicate jewelry and everyday glow. Necklaces, earrings, rings and bracelets made with love." />
+    <meta name="theme-color" content="#F7B6C8" />
+    <title>@(ViewData["Title"] is string t && !string.IsNullOrEmpty(t) ? $"{t} · GLOWY ORE" : "GLOWY ORE · Handcrafted Ornaments")</title>
+    <link rel="icon" type="image/png" href="~/images/brand/favicon.png" />
+    <link rel="apple-touch-icon" href="~/images/brand/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <div class="bg-decor" aria-hidden="true">
+        <span class="blob blob-a"></span>
+        <span class="blob blob-b"></span>
+        <span class="blob blob-c"></span>
+    </div>
+
+    <div class="announce">
+        <div class="announce-track">
+            <span>Free delivery on orders over ৳2,000</span><i>✦</i>
+            <span>Handcrafted ornaments, made to glow</span><i>✦</i>
+            <span>Cash on delivery available</span><i>✦</i>
+            <span>Free delivery on orders over ৳2,000</span><i>✦</i>
+            <span>Handcrafted ornaments, made to glow</span><i>✦</i>
+            <span>Cash on delivery available</span><i>✦</i>
+        </div>
+    </div>
+
+    <header class="site-header" id="siteHeader">
+        <div class="container header-inner">
+            <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+
+            <a class="brand" href="/" aria-label="GLOWY ORE home">
+                <span class="brand-gem">
+                    <img src="~/images/brand/glowy-ore-logo.jpg" alt="" width="46" height="46" />
+                </span>
+                <span class="brand-words">
+                    <span class="brand-name">GLOWY ORE</span>
+                    <span class="brand-tag">Handcrafted ornaments</span>
+                </span>
+            </a>
+
+            <nav class="main-nav" id="mainNav" aria-label="Main navigation">
+                <a href="/">Home</a>
+                <a href="/shop">Shop</a>
+                <div class="nav-drop">
+                    <button type="button" class="nav-drop-btn">Collections <span class="chev">▾</span></button>
+                    <div class="drop-panel">
+                        <p class="drop-label">Shop by collection</p>
+                        @await Component.InvokeAsync("CategoryMenu")
+                        <a class="drop-all" href="/shop">View everything <span>→</span></a>
+                    </div>
+                </div>
+                <a href="/#story">Our Story</a>
+                <a href="/#contact">Contact</a>
+            </nav>
+
+            <div class="header-actions">
+                <a class="admin-link" href="/admin/login" title="Admin panel">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0 2c-4 0-7 2.2-7 5v1h14v-1c0-2.8-3-5-7-5Z" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>
+                    <span>Admin</span>
+                </a>
+                <a class="cart-btn" href="/cart">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l-1 11.5a2 2 0 0 1-2 1.5H9a2 2 0 0 1-2-1.5L6 8Zm3 0V6.5a3 3 0 0 1 6 0V8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
+                    <span>Bag</span>
+                    <span class="cart-count @(cartCount == 0 ? "is-empty" : "")" id="cartCount">@cartCount</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="nav-scrim" id="navScrim"></div>
+
+    @if (!string.IsNullOrEmpty(toast))
+    {
+        <div class="toast" id="toast" role="status">
+            <span>@toast</span>
+        </div>
+    }
+
+    <main>
+        @RenderBody()
+    </main>
+
+    <footer class="site-footer" id="contact">
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <a class="brand brand-footer" href="/">
+                    <span class="brand-gem">
+                        <img src="~/images/brand/glowy-ore-logo.jpg" alt="" width="56" height="56" />
+                    </span>
+                    <span class="brand-words">
+                        <span class="brand-name">GLOWY ORE</span>
+                        <span class="brand-tag">Handcrafted ornaments</span>
+                    </span>
+                </a>
+                <p>Little ornaments, big glow. Delicate jewelry designed in Dhaka and made to be worn every day.</p>
+                <a class="footer-fb" href="https://www.facebook.com/ornilaaa" target="_blank" rel="noopener">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 9h3l.5-3H14V4.5c0-.9.3-1.5 1.6-1.5H18V.3C17.6.2 16.4 0 15.1 0 12.2 0 10 1.8 10 5.1V6H7v3h3v12h4V9Z" /></svg>
+                    Message us on Facebook
+                </a>
+            </div>
+
+            <div class="footer-col">
+                <h4>Shop</h4>
+                @await Component.InvokeAsync("CategoryMenu")
+                <a href="/shop">All ornaments</a>
+            </div>
+
+            <div class="footer-col">
+                <h4>Help</h4>
+                <a href="/#story">Our story</a>
+                <a href="/cart">Your bag</a>
+                <a href="/#contact">Delivery &amp; returns</a>
+                <a href="/admin/login">Admin login</a>
+            </div>
+
+            <div class="footer-col footer-news">
+                <h4>Join the glow list</h4>
+                <p>New drops, tiny discounts and styling notes — once in a while, never spammy.</p>
+                <form class="news-form" data-newsletter>
+                    <input type="email" placeholder="Your email address" aria-label="Email address" required />
+                    <button type="submit" aria-label="Subscribe">→</button>
+                </form>
+                <p class="footer-note">Dhaka, Bangladesh · hello@@glowyore.com</p>
+            </div>
+        </div>
+
+        <div class="container footer-bottom">
+            <p>© @DateTime.Now.Year GLOWY ORE. Made with pearl dust &amp; love.</p>
+            <p>Cash on delivery · bKash &amp; Nagad coming soon</p>
+        </div>
+    </footer>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

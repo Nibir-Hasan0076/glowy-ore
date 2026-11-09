@@ -1,0 +1,58 @@
+@model ProductFormViewModel
+@{
+    ViewData["Title"] = "New product";
+    ViewData["AdminTitle"] = "New product";
+    ViewData["ActiveAdmin"] = "products";
+}
+
+<div class="admin-page-head">
+    <p>Add an ornament, set its price and stock, then upload a few photos.</p>
+    <div class="actions">
+        <a class="btn btn-ghost btn-sm" href="/admin/products">← Back to products</a>
+    </div>
+</div>
+
+@if (Model.Categories.Count == 0)
+{
+    <div class="admin-empty">
+        <div class="empty-icon">✦</div>
+        <h2>Create a category first</h2>
+        <p>Every product needs a home. Add a collection, then come back to this page.</p>
+        <a class="btn btn-primary btn-sm" href="/admin/categories/create">+ New category</a>
+    </div>
+}
+else
+{
+    <form class="admin-form" method="post" action="/admin/products/create" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+
+        <div class="form-section">
+            <div class="form-section-head">
+                <h2>Product details</h2>
+                <span>Fields marked with an asterisk are required.</span>
+            </div>
+            <partial name="_ProductForm" model="Model" />
+        </div>
+
+        <div class="form-section">
+            <div class="form-section-head">
+                <h2>Product pictures</h2>
+                <span>The first picture is used as the product cover.</span>
+            </div>
+
+            <label class="file-drop">
+                <input type="file" name="Images" multiple accept="image/*" data-file-input data-preview="#newProductImages" />
+                <span class="drop-icon">＋</span>
+                <strong>Drop pictures here or click to upload</strong>
+                <span>JPG, PNG, WEBP or GIF · up to 6 MB each · add several angles</span>
+            </label>
+            <span asp-validation-for="Images" class="text-danger"></span>
+            <div class="preview-grid" id="newProductImages"></div>
+        </div>
+
+        <div class="form-actions">
+            <button class="btn btn-primary" type="submit">Create product</button>
+            <a class="btn btn-ghost" href="/admin/products">Cancel</a>
+        </div>
+    </form>
+}

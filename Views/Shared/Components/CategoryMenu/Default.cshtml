@@ -1,0 +1,11 @@
+@model List<GlowyOre.Models.Category>
+<ul class="category-list">
+    @foreach (var category in Model)
+    {
+        <li>
+            <a href="/category/@category.Slug">
+                <span class="cat-spark">✦</span>@category.Name
+            </a>
+        </li>
+    }
+</ul>

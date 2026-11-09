@@ -1,0 +1,50 @@
+@model GlowyOre.Models.Product
+@{
+    var img = "/" + (Model.PrimaryImage ?? "images/placeholder.svg");
+    var discount = Model.HasDiscount
+        ? (int)Math.Round((1 - (double)Model.Price / (double)Model.CompareAtPrice!.Value) * 100)
+        : 0;
+}
+<article class="product-card" data-reveal>
+    <a class="product-media" href="/product/@Model.Slug" aria-label="View @Model.Name">
+        <img src="@img" alt="@Model.Name" loading="lazy" />
+        @if (Model.Stock <= 0)
+        {
+            <span class="product-badge out">Sold out</span>
+        }
+        else if (discount > 0)
+        {
+            <span class="product-badge sale">-@discount%</span>
+        }
+        else if (Model.IsFeatured)
+        {
+            <span class="product-badge">Bestseller</span>
+        }
+    </a>
+    <div class="product-body">
+        <span class="product-cat">@Model.Category?.Name</span>
+        <a class="product-name" href="/product/@Model.Slug">@Model.Name</a>
+        <div class="product-price">
+            <strong>@Format.Money(Model.Price)</strong>
+            @if (Model.HasDiscount)
+            {
+                <s>@Format.Money(Model.CompareAtPrice)</s>
+            }
+        </div>
+    </div>
+    @if (Model.Stock > 0)
+    {
+        <form class="quick-add" method="post" action="/cart/add" data-quick-add>
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="id" value="@Model.Id" />
+            <input type="hidden" name="qty" value="1" />
+            <button type="submit" aria-label="Add @Model.Name to bag">+</button>
+        </form>
+    }
+    else
+    {
+        <div class="quick-add">
+            <button type="button" disabled aria-label="Sold out">+</button>
+        </div>
+    }
+</article>

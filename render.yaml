@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: glowy-ore
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: Admin__Password
+        sync: false
+    # The free plan has an ephemeral filesystem: the database and uploaded
+    # images reset whenever the service restarts. For a real store, switch to
+    # plan: starter, mount a disk at /var/data, and set:
+    #   ConnectionStrings__DefaultConnection = Data Source=/var/data/glowyore.db
+    #   Storage__UploadsRoot = /var/data/uploads
+    # disk:
+    #   name: data
+    #   mountPath: /var/data
+    #   sizeGB: 1

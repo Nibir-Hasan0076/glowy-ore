@@ -1,0 +1,138 @@
+@model ProductPageViewModel
+@{
+    ViewData["Title"] = Model.Product.Name;
+    var images = Model.Product.Images.OrderBy(i => i.SortOrder).Select(i => "/" + i.ImagePath).ToList();
+    if (images.Count == 0)
+    {
+        images.Add("/images/seed/hero.jpg");
+    }
+    var discount = Model.Product.HasDiscount
+        ? (int)Math.Round((1 - (double)Model.Product.Price / (double)Model.Product.CompareAtPrice!.Value) * 100)
+        : 0;
+    var stockClass = Model.Product.Stock <= 0 ? "out" : Model.Product.Stock <= 5 ? "low" : "";
+}
+
+<div class="container">
+    <div class="breadcrumbs" style="justify-content:flex-start; margin-top:34px;">
+        <a href="/">Home</a><span>/</span>
+        <a href="/shop">Shop</a><span>/</span>
+        @if (Model.Product.Category is not null)
+        {
+            <a href="/category/@Model.Product.Category.Slug">@Model.Product.Category.Name</a><span>/</span>
+        }
+        <span style="color:var(--wine);">@Model.Product.Name</span>
+    </div>
+
+    <div class="product-detail">
+        <div class="gallery" data-reveal>
+            <div class="gallery-main">
+                <img id="galleryMain" src="@images[0]" alt="@Model.Product.Name" />
+                @if (discount > 0 && Model.Product.Stock > 0)
+                {
+                    <span class="product-badge sale">-@discount%</span>
+                }
+            </div>
+            @if (images.Count > 1)
+            {
+                <div class="gallery-thumbs">
+                    @for (var i = 0; i < images.Count; i++)
+                    {
+                        <button type="button" class="gallery-thumb @(i == 0 ? "active" : "")" data-thumb data-src="@images[i]" aria-label="View image @(i + 1)">
+                            <img src="@images[i]" alt="@Model.Product.Name image @(i + 1)" loading="lazy" />
+                        </button>
+                    }
+                </div>
+            }
+        </div>
+
+        <div class="product-info" data-reveal style="--delay:.1s">
+            <span class="product-cat">@Model.Product.Category?.Name</span>
+            <h1>@Model.Product.Name</h1>
+
+            <div class="rating-row">
+                <span class="stars">★★★★★</span>
+                <span>4.9 · 128 reviews</span>
+            </div>
+
+            <div class="detail-price">
+                <strong>@Format.Money(Model.Product.Price)</strong>
+                @if (Model.Product.HasDiscount)
+                {
+                    <s>@Format.Money(Model.Product.CompareAtPrice)</s>
+                    <span class="save">Save @discount%</span>
+                }
+            </div>
+
+            <p class="detail-desc">@Model.Product.Description</p>
+
+            <span class="stock-note @stockClass">
+                @if (Model.Product.Stock <= 0)
+                {
+                    <span>Sold out — join the glow list for restocks</span>
+                }
+                else if (Model.Product.Stock <= 5)
+                {
+                    <span>Only @Model.Product.Stock left in stock</span>
+                }
+                else
+                {
+                    <span>In stock, ready to glow</span>
+                }
+            </span>
+
+            @if (Model.Product.Stock > 0)
+            {
+                <form class="detail-form" method="post" action="/cart/add">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@Model.Product.Id" />
+                    <div class="qty-stepper" data-stepper data-max="@Math.Min(99, Model.Product.Stock)">
+                        <button type="button" data-dec aria-label="Decrease quantity">−</button>
+                        <input type="number" name="qty" value="1" min="1" max="@Math.Min(99, Model.Product.Stock)" aria-label="Quantity" />
+                        <button type="button" data-inc aria-label="Increase quantity">+</button>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Add to bag · @Format.Money(Model.Product.Price)</button>
+                </form>
+            }
+            else
+            {
+                <div class="detail-form">
+                    <button class="btn btn-ghost btn-block" type="button" disabled>Sold out</button>
+                </div>
+            }
+
+            <div class="perks">
+                <div class="perk">
+                    <span class="perk-icon">✦</span>
+                    <span><strong>Free delivery</strong> on orders over ৳2,000 — otherwise ৳80 inside Bangladesh.</span>
+                </div>
+                <div class="perk">
+                    <span class="perk-icon">✦</span>
+                    <span><strong>Cash on delivery.</strong> Check your pieces, then pay at your door.</span>
+                </div>
+                <div class="perk">
+                    <span class="perk-icon">✦</span>
+                    <span><strong>Gift wrapped, always.</strong> Soft pink tissue, a note card and a little sparkle.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.Related.Count > 0)
+    {
+        <section class="related">
+            <div class="section-head">
+                <div>
+                    <span class="eyebrow"><span class="spark">✦</span> You may also glow</span>
+                    <h2>More from @Model.Product.Category?.Name.</h2>
+                </div>
+                <a class="link-arrow" href="/category/@Model.Product.Category?.Slug">See the collection <span>→</span></a>
+            </div>
+            <div class="product-grid">
+                @foreach (var product in Model.Related)
+                {
+                    <partial name="_ProductCard" model="product" />
+                }
+            </div>
+        </section>
+    }
+</div>

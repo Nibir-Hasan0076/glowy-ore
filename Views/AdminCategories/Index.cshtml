@@ -1,0 +1,52 @@
+@model List<GlowyOre.Models.Category>
+@{
+    ViewData["Title"] = "Categories";
+    ViewData["AdminTitle"] = "Categories";
+    ViewData["ActiveAdmin"] = "categories";
+}
+
+<div class="admin-page-head">
+    <p>Organise your ornaments into soft little collections. The first picture becomes the category icon.</p>
+    <div class="actions">
+        <a class="btn btn-primary btn-sm" href="/admin/categories/create">+ New category</a>
+    </div>
+</div>
+
+@if (Model.Count == 0)
+{
+    <div class="admin-empty">
+        <div class="empty-icon">✦</div>
+        <h2>No categories yet</h2>
+        <p>Start with Necklaces, Earrings, Rings or Bracelets — then add your ornaments.</p>
+        <a class="btn btn-primary btn-sm" href="/admin/categories/create">Create the first category</a>
+    </div>
+}
+else
+{
+    <div class="admin-cat-grid">
+        @foreach (var category in Model)
+        {
+            <div class="admin-cat-card">
+                <div class="admin-cat-media">
+                    <img src="/@(category.IconPath ?? "images/placeholder.svg")" alt="@category.Name" />
+                    <span class="count">@category.Products.Count products · @category.Images.Count pics</span>
+                </div>
+                <div class="admin-cat-body">
+                    <h3>@category.Name</h3>
+                    <span class="slug">/@category.Slug · order @category.SortOrder</span>
+                    <div class="actions">
+                        <a href="/category/@category.Slug" target="_blank" rel="noopener">View ↗</a>
+                        <span style="display: flex; gap: 14px; align-items: center;">
+                            <a href="/admin/categories/edit/@category.Id">Edit</a>
+                            <form class="inline-form" method="post" action="/admin/categories/delete/@category.Id"
+                                  data-confirm="Delete the @category.Name category? This cannot be undone.">
+                                @Html.AntiForgeryToken()
+                                <button class="link-danger" type="submit">Delete</button>
+                            </form>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

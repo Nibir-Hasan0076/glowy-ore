@@ -1,0 +1,126 @@
+@model AdminDashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+    ViewData["AdminTitle"] = "Dashboard";
+    ViewData["ActiveAdmin"] = "dashboard";
+}
+
+<div class="admin-stats">
+    <div class="stat-card revenue">
+        <div class="stat-icon">৳</div>
+        <span class="stat-label">Revenue</span>
+        <strong>@Format.Money(Model.Revenue)</strong>
+        <small>excluding cancelled orders</small>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">✧</div>
+        <span class="stat-label">Total orders</span>
+        <strong>@Model.OrderCount</strong>
+        <small>all time</small>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">✦</div>
+        <span class="stat-label">Pending</span>
+        <strong>@Model.PendingCount</strong>
+        <small>need confirming</small>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">◇</div>
+        <span class="stat-label">Products</span>
+        <strong>@Model.ProductCount</strong>
+        <small>@Model.CategoryCount categories</small>
+    </div>
+</div>
+
+<div class="admin-grid-two">
+    <div class="panel">
+        <div class="panel-head">
+            <h2>Recent orders</h2>
+            <a href="/admin/orders">View all →</a>
+        </div>
+        @if (Model.RecentOrders.Count == 0)
+        {
+            <div class="admin-empty" style="border:0;background:transparent;">
+                <div class="empty-icon">✦</div>
+                <h2>No orders yet</h2>
+                <p>Your first order will appear here the moment someone checks out.</p>
+                <a class="btn btn-ghost btn-sm" href="/" target="_blank">View the store</a>
+            </div>
+        }
+        else
+        {
+            <div class="table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Order</th>
+                            <th>Customer</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var order in Model.RecentOrders)
+                        {
+                            <tr>
+                                <td><strong>@order.OrderNumber</strong></td>
+                                <td>
+                                    <div class="cell-name">@order.CustomerName</div>
+                                    <div class="cell-sub">@order.City</div>
+                                </td>
+                                <td>@Format.Money(order.Total)</td>
+                                <td><span class="pill status-@order.Status.ToLowerInvariant()">@order.Status</span></td>
+                                <td class="cell-sub">@Format.DateLocal(order.CreatedAt)</td>
+                                <td><a class="row-link" href="/admin/orders/@order.Id">View</a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+
+    <div>
+        <div class="panel" style="margin-bottom: 18px;">
+            <div class="panel-head">
+                <h2>Low stock</h2>
+                <a href="/admin/products">Manage →</a>
+            </div>
+            <div class="panel-body">
+                @if (Model.LowStock.Count == 0)
+                {
+                    <p style="font-size: 13px; color: var(--muted);">Everything is comfortably in stock ✨</p>
+                }
+                else
+                {
+                    <div style="display: grid; gap: 12px;">
+                        @foreach (var product in Model.LowStock)
+                        {
+                            <a href="/admin/products/edit/@product.Id" style="display:flex;align-items:center;gap:12px;">
+                                <span class="cell-img" style="width:44px;height:44px;border-radius:10px;overflow:hidden;background:var(--blush);flex-shrink:0;">
+                                    <img src="/@(product.PrimaryImage ?? "images/placeholder.svg")" alt="@product.Name" style="width:100%;height:100%;object-fit:cover;" />
+                                </span>
+                                <span style="flex:1;">
+                                    <span style="display:block;font-size:13px;font-weight:500;">@product.Name</span>
+                                    <span style="font-size:11px;color:var(--muted);">@product.Category?.Name</span>
+                                </span>
+                                <span class="pill @(product.Stock == 0 ? "status-cancelled" : "status-pending")">@product.Stock left</span>
+                            </a>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-head"><h2>Quick actions</h2></div>
+            <div class="panel-body" style="display: flex; flex-direction: column; gap: 10px;">
+                <a class="btn btn-primary btn-sm" href="/admin/products/create">+ Add a product</a>
+                <a class="btn btn-ghost btn-sm" href="/admin/categories/create">+ Add a category</a>
+                <a class="btn btn-ghost btn-sm" href="/" target="_blank">↗ View the store</a>
+            </div>
+        </div>
+    </div>
+</div>

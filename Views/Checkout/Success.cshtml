@@ -1,0 +1,46 @@
+@model GlowyOre.Models.Order
+@{
+    ViewData["Title"] = "Order confirmed";
+}
+
+<section class="page-hero" style="padding-bottom: 10px;">
+    <div class="container">
+        <div class="success-wrap">
+            <div class="success-card" data-reveal>
+                <div class="success-mark">
+                    <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M12 25.5 21 34 37 15" /></svg>
+                </div>
+                <span class="eyebrow" style="justify-content:center;"><span class="spark">✦</span> Order confirmed</span>
+                <h1>Your glow is on its way.</h1>
+                <span class="order-no">Order @Model.OrderNumber</span>
+                <p>
+                    Thank you, @Model.CustomerName! We've received your order and will call
+                    <strong>@Model.Phone</strong> to confirm delivery. Your ornaments are being
+                    wrapped in soft pink as we speak.
+                </p>
+
+                <div class="success-items">
+                    @foreach (var item in Model.Items)
+                    {
+                        <div class="success-item">
+                            <span>@item.ProductName <span style="color:var(--muted);">× @item.Quantity</span></span>
+                            <strong>@Format.Money(item.LineTotal)</strong>
+                        </div>
+                    }
+                    <div class="success-total">
+                        <span>Total · cash on delivery</span>
+                        <strong>@Format.Money(Model.Total)</strong>
+                    </div>
+                </div>
+
+                <div class="success-actions">
+                    <a class="btn btn-primary" href="/shop">Keep glowing</a>
+                    <a class="btn btn-ghost" href="/">Back home</a>
+                </div>
+                <p style="margin-top: 22px; font-size: 11.5px; color: var(--muted);">
+                    Delivering to: @Model.Address, @Model.City · Placed @Format.DateTimeLocal(Model.CreatedAt)
+                </p>
+            </div>
+        </div>
+    </div>
+</section>

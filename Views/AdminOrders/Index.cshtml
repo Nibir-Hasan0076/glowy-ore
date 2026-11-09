@@ -1,0 +1,67 @@
+@model List<GlowyOre.Models.Order>
+@{
+    ViewData["Title"] = "Orders";
+    ViewData["AdminTitle"] = "Orders";
+    ViewData["ActiveAdmin"] = "orders";
+    var status = ViewBag.Status as string;
+}
+
+<div class="admin-page-head">
+    <p>Every glow delivery, from first click to your customer's door.</p>
+    <div class="chip-row" style="margin: 0;">
+        <a class="chip @(string.IsNullOrEmpty(status) ? "active" : "")" href="/admin/orders">All</a>
+        @foreach (var s in OrderStatuses.All)
+        {
+            <a class="chip @(status == s ? "active" : "")" href="/admin/orders?status=@s">@s</a>
+        }
+    </div>
+</div>
+
+@if (Model.Count == 0)
+{
+    <div class="admin-empty">
+        <div class="empty-icon">✦</div>
+        <h2>@(string.IsNullOrEmpty(status) ? "No orders yet" : $"No {status?.ToLowerInvariant()} orders")</h2>
+        <p>@(string.IsNullOrEmpty(status) ? "Orders will appear here the moment a customer checks out." : "Try another status filter, or wait for the next order to land.")</p>
+        <a class="btn btn-ghost btn-sm" href="/admin/orders">See all orders</a>
+    </div>
+}
+else
+{
+    <div class="panel">
+        <div class="table-wrap">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Order</th>
+                        <th>Customer</th>
+                        <th>Phone</th>
+                        <th>Items</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Placed</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var order in Model)
+                    {
+                        <tr>
+                            <td><strong>@order.OrderNumber</strong></td>
+                            <td>
+                                <div class="cell-name">@order.CustomerName</div>
+                                <div class="cell-sub">@order.City</div>
+                            </td>
+                            <td>@order.Phone</td>
+                            <td>@order.Items.Sum(i => i.Quantity)</td>
+                            <td>@Format.Money(order.Total)</td>
+                            <td><span class="pill status-@order.Status.ToLowerInvariant()">@order.Status</span></td>
+                            <td class="cell-sub">@Format.DateTimeLocal(order.CreatedAt)</td>
+                            <td><a class="row-link" href="/admin/orders/@order.Id">View</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

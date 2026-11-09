@@ -1,0 +1,94 @@
+@{
+    var active = ViewData["ActiveAdmin"] as string ?? "";
+    var toast = TempData["Toast"] as string;
+    var adminTitle = ViewData["AdminTitle"] as string ?? ViewData["Title"] as string ?? "Studio";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#7C3550" />
+    <title>@adminTitle · GLOWY ORE Studio</title>
+    <link rel="icon" type="image/png" href="~/images/brand/favicon.png" />
+    <link rel="apple-touch-icon" href="~/images/brand/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body class="admin-body">
+    <div class="admin-shell">
+        <aside class="admin-side" id="adminSide">
+            <a class="brand admin-brand" href="/">
+                <span class="brand-gem">
+                    <img src="~/images/brand/glowy-ore-logo.jpg" alt="" width="42" height="42" />
+                </span>
+                <span class="brand-words">
+                    <span class="brand-name">GLOWY ORE</span>
+                    <span class="brand-tag">Studio</span>
+                </span>
+            </a>
+
+            <p class="admin-side-label">Manage</p>
+            <nav class="admin-nav">
+                <a class="@(active == "dashboard" ? "active" : "")" href="/admin">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 13h6V4H4v9Zm0 7h6v-4H4v4Zm10 0h6v-9h-6v9Zm0-16v4h6V4h-6Z" /></svg>
+                    Dashboard
+                </a>
+                <a class="@(active == "orders" ? "active" : "")" href="/admin/orders">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3Z" /><path d="M9 8h6M9 12h6" /></svg>
+                    Orders
+                </a>
+                <a class="@(active == "products" ? "active" : "")" href="/admin/products">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 7v10l7 4 7-4V7l-7-4Z" /><path d="m5 7 7 4 7-4M12 11v10" /></svg>
+                    Products
+                </a>
+                <a class="@(active == "categories" ? "active" : "")" href="/admin/categories">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 5h7v7H4V5Zm9 0h7v7h-7V5ZM4 14h7v5H4v-5Zm9 0h7v5h-7v-5Z" /></svg>
+                    Categories
+                </a>
+            </nav>
+
+            <div class="admin-side-foot">
+                <a href="/" target="_blank" rel="noopener">↗ View the store</a>
+                <form method="post" action="/admin/logout">
+                    @Html.AntiForgeryToken()
+                    <button type="submit">⏻ Sign out</button>
+                </form>
+            </div>
+        </aside>
+
+        <div class="admin-main">
+            <header class="admin-top">
+                <button class="admin-menu-btn" id="adminMenuBtn" aria-label="Open admin menu">☰</button>
+                <div>
+                    <span class="admin-crumb">GLOWY ORE studio</span>
+                    <h1>@adminTitle</h1>
+                </div>
+                <span class="admin-user"><span class="admin-user-dot"></span>@User.Identity?.Name</span>
+            </header>
+
+            @if (!string.IsNullOrEmpty(toast))
+            {
+                <div class="toast" id="toast" role="status">
+                    <span>@toast</span>
+                </div>
+            }
+
+            <div class="admin-content">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-scrim" id="adminScrim"></div>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/admin.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

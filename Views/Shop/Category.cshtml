@@ -1,0 +1,41 @@
+@model CategoryPageViewModel
+@{
+    ViewData["Title"] = Model.Category.Name;
+    var banner = "/" + (Model.Category.IconPath ?? "images/placeholder.svg");
+}
+
+<div class="container">
+    <div class="breadcrumbs" style="justify-content:flex-start; margin-top:34px;">
+        <a href="/">Home</a><span>/</span><a href="/shop">Shop</a><span>/</span><span style="color:var(--wine);">@Model.Category.Name</span>
+    </div>
+
+    <div class="category-banner" data-reveal>
+        <img src="@banner" alt="@Model.Category.Name collection" />
+        <div class="category-banner-inner">
+            <span class="eyebrow"><span class="spark">✦</span> Collection</span>
+            <h1>@Model.Category.Name</h1>
+            <p>@Model.Category.Description</p>
+        </div>
+    </div>
+
+    <p class="result-count">@Model.Products.Count @(Model.Products.Count == 1 ? "piece" : "pieces") in this collection</p>
+
+    @if (Model.Products.Count == 0)
+    {
+        <div class="empty-state" data-reveal>
+            <div class="empty-icon">✦</div>
+            <h2>Freshly empty</h2>
+            <p>New @Model.Category.Name.ToLowerInvariant() are on their way. Meanwhile, the rest of the collection is waiting.</p>
+            <a class="btn btn-primary" href="/shop">Browse all ornaments</a>
+        </div>
+    }
+    else
+    {
+        <div class="product-grid">
+            @foreach (var product in Model.Products)
+            {
+                <partial name="_ProductCard" model="product" />
+            }
+        </div>
+    }
+</div>

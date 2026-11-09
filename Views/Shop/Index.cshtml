@@ -1,0 +1,63 @@
+@model CatalogViewModel
+@{
+    ViewData["Title"] = Model.ActiveCategory?.Name ?? "Shop all ornaments";
+}
+
+<section class="page-hero">
+    <div class="container">
+        <span class="eyebrow"><span class="spark">✦</span> The ornament shop</span>
+        <h1>@(Model.ActiveCategory?.Name ?? "Every little glow")</h1>
+        <p>@(Model.ActiveCategory?.Description ?? "Delicate necklaces, earrings, rings and bracelets — designed to be layered, gifted and worn every single day.")</p>
+    </div>
+</section>
+
+<div class="container">
+    <div class="filter-bar">
+        <div class="chip-row">
+            <a class="chip @(Model.ActiveCategory is null ? "active" : "")" href="/shop">All</a>
+            @foreach (var category in Model.Categories)
+            {
+                <a class="chip @(Model.ActiveCategory?.Id == category.Id ? "active" : "")" href="/shop?category=@category.Slug">@category.Name</a>
+            }
+        </div>
+        <form class="shop-tools" method="get" action="/shop">
+            @if (Model.ActiveCategory is not null)
+            {
+                <input type="hidden" name="category" value="@Model.ActiveCategory.Slug" />
+            }
+            <div class="search-box">
+                <input type="search" name="q" value="@Model.Query" placeholder="Search ornaments…" aria-label="Search ornaments" />
+                <button type="submit" aria-label="Search">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+                </button>
+            </div>
+            <select class="sort-select" name="sort" onchange="this.form.submit()" aria-label="Sort products">
+                <option value="new" selected="@(string.IsNullOrEmpty(Model.Sort) || Model.Sort == "new")">Newest</option>
+                <option value="price-low" selected="@(Model.Sort == "price-low")">Price: low to high</option>
+                <option value="price-high" selected="@(Model.Sort == "price-high")">Price: high to low</option>
+                <option value="name" selected="@(Model.Sort == "name")">Name A–Z</option>
+            </select>
+        </form>
+    </div>
+
+    <p class="result-count">@Model.TotalCount @(Model.TotalCount == 1 ? "piece" : "pieces")</p>
+
+    @if (Model.Products.Count == 0)
+    {
+        <div class="empty-state" data-reveal>
+            <div class="empty-icon">✦</div>
+            <h2>Nothing here just yet</h2>
+            <p>We couldn't find an ornament matching that search. Try another word, or browse the full collection.</p>
+            <a class="btn btn-primary" href="/shop">See everything</a>
+        </div>
+    }
+    else
+    {
+        <div class="product-grid">
+            @foreach (var product in Model.Products)
+            {
+                <partial name="_ProductCard" model="product" />
+            }
+        </div>
+    }
+</div>

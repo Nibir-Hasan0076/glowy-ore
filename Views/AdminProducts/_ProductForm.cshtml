@@ -1,0 +1,53 @@
+@model ProductFormViewModel
+<div class="admin-form-grid">
+    <div class="field full">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" placeholder="e.g. Aurora Pearl Pendant" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="field">
+        <label asp-for="CategoryId"></label>
+        <select asp-for="CategoryId">
+            <option value="0">Choose a category…</option>
+            @foreach (var category in Model.Categories)
+            {
+                <option value="@category.Id" selected="@(Model.CategoryId == category.Id)">@category.Name</option>
+            }
+        </select>
+        <span asp-validation-for="CategoryId" class="text-danger"></span>
+    </div>
+
+    <div class="field">
+        <label asp-for="Stock"></label>
+        <input asp-for="Stock" type="number" min="0" />
+        <span asp-validation-for="Stock" class="text-danger"></span>
+    </div>
+
+    <div class="field">
+        <label asp-for="Price"></label>
+        <input asp-for="Price" type="number" min="1" step="1" placeholder="1850" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+
+    <div class="field">
+        <label asp-for="CompareAtPrice"></label>
+        <input asp-for="CompareAtPrice" type="number" min="0" step="1" placeholder="Optional — shows a strikethrough price" />
+        <span asp-validation-for="CompareAtPrice" class="text-danger"></span>
+    </div>
+
+    <div class="field full">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" rows="5" placeholder="Tell the story of this piece — materials, size, how it feels…"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <label class="switch-row">
+        <input asp-for="IsFeatured" type="checkbox" />
+        Show in “The glow-up edit” on the home page
+    </label>
+    <label class="switch-row">
+        <input asp-for="IsActive" type="checkbox" />
+        Active &amp; visible in the store
+    </label>
+</div>

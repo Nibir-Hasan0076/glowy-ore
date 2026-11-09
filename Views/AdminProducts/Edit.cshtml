@@ -1,0 +1,67 @@
+@model ProductFormViewModel
+@{
+    ViewData["Title"] = "Edit product";
+    ViewData["AdminTitle"] = "Edit product";
+    ViewData["ActiveAdmin"] = "products";
+}
+
+<div class="admin-page-head">
+    <p>Update details, stock, or manage this product's picture gallery.</p>
+    <div class="actions">
+        <a class="btn btn-ghost btn-sm" href="/admin/products">← Back to products</a>
+    </div>
+</div>
+
+<form class="admin-form" method="post" action="/admin/products/edit/@Model.Id" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-section">
+        <div class="form-section-head">
+            <h2>Product details</h2>
+            <span>Changes appear in the store as soon as you save.</span>
+        </div>
+        <partial name="_ProductForm" model="Model" />
+    </div>
+
+    <div class="form-section">
+        <div class="form-section-head">
+            <h2>Product pictures</h2>
+            <span>Tick “Remove” on any picture to delete it when you save.</span>
+        </div>
+
+        @if (Model.ExistingImages.Count > 0)
+        {
+            <p style="font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--wine); margin-bottom: 10px;">Current pictures</p>
+            <div class="preview-grid" style="margin-bottom: 18px;">
+                @foreach (var image in Model.ExistingImages)
+                {
+                    <div class="preview-item removable">
+                        <img src="/@image.ImagePath" alt="Product picture" />
+                        <label>
+                            <input type="checkbox" name="RemoveImageIds" value="@image.Id" /> Remove
+                        </label>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <p style="font-size: 12.5px; color: var(--muted); margin-bottom: 14px;">No pictures yet — upload one below.</p>
+        }
+
+        <label class="file-drop">
+            <input type="file" name="Images" multiple accept="image/*" data-file-input data-preview="#newProductImages" />
+            <span class="drop-icon">＋</span>
+            <strong>Add more pictures</strong>
+            <span>JPG, PNG, WEBP or GIF · up to 6 MB each</span>
+        </label>
+        <span asp-validation-for="Images" class="text-danger"></span>
+        <div class="preview-grid" id="newProductImages"></div>
+    </div>
+
+    <div class="form-actions">
+        <button class="btn btn-primary" type="submit">Save changes</button>
+        <a class="btn btn-ghost" href="/admin/products">Cancel</a>
+    </div>
+</form>

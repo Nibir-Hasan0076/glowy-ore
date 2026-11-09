@@ -1,0 +1,98 @@
+@model CheckoutViewModel
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<section class="page-hero">
+    <div class="container">
+        <span class="eyebrow"><span class="spark">✦</span> Almost yours</span>
+        <h1>Let's get your glow home.</h1>
+        <p>Tell us where to send it. We'll wrap everything in soft pink and bring it to your door.</p>
+    </div>
+</section>
+
+<div class="container">
+    <form method="post" action="/checkout">
+        @Html.AntiForgeryToken()
+        <div class="checkout-layout">
+            <div class="form-card">
+                <h3>Delivery details</h3>
+                <p class="form-hint">We'll use your phone number to confirm the order before dispatch.</p>
+
+                <div asp-validation-summary="ModelOnly" class="validation-summary-errors"></div>
+
+                <div class="field-grid">
+                    <div class="field">
+                        <label asp-for="CustomerName"></label>
+                        <input asp-for="CustomerName" placeholder="Your full name" autocomplete="name" />
+                        <span asp-validation-for="CustomerName" class="text-danger"></span>
+                    </div>
+                    <div class="field">
+                        <label asp-for="Phone"></label>
+                        <input asp-for="Phone" placeholder="01XXXXXXXXX" autocomplete="tel" />
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
+                    <div class="field full">
+                        <label asp-for="Address"></label>
+                        <input asp-for="Address" placeholder="House, road, area" autocomplete="street-address" />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+                    <div class="field">
+                        <label asp-for="City"></label>
+                        <input asp-for="City" placeholder="e.g. Dhaka" autocomplete="address-level2" />
+                        <span asp-validation-for="City" class="text-danger"></span>
+                    </div>
+                    <div class="field full">
+                        <label asp-for="Note"></label>
+                        <textarea asp-for="Note" placeholder="A gift note, delivery instruction, anything we should know…"></textarea>
+                        <span asp-validation-for="Note" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <label class="payment-option">
+                    <input type="radio" checked disabled />
+                    <span>
+                        <strong>Cash on delivery</strong>
+                        <span>Pay when your ornaments arrive. bKash &amp; Nagad coming soon.</span>
+                    </span>
+                </label>
+            </div>
+
+            <aside class="summary-card">
+                <h3>Your order</h3>
+                <div class="checkout-items">
+                    @foreach (var line in Model.Cart.Lines)
+                    {
+                        <div class="checkout-item">
+                            <span class="thumb">
+                                <img src="/@(line.Product.PrimaryImage ?? "images/placeholder.svg")" alt="@line.Product.Name" />
+                            </span>
+                            <span>
+                                <span class="name">@line.Product.Name</span>
+                                <span class="qty">Qty @line.Quantity · @Format.Money(line.Product.Price) each</span>
+                            </span>
+                            <span class="price">@Format.Money(line.LineTotal)</span>
+                        </div>
+                    }
+                </div>
+
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <strong>@Format.Money(Model.Cart.Subtotal)</strong>
+                </div>
+                <div class="summary-row">
+                    <span>Delivery</span>
+                    <strong>@(Model.Cart.DeliveryFee == 0 ? "Free" : Format.Money(Model.Cart.DeliveryFee))</strong>
+                </div>
+                <div class="summary-row total">
+                    <span>Total</span>
+                    <strong>@Format.Money(Model.Cart.Total)</strong>
+                </div>
+
+                <button class="btn btn-primary btn-block" type="submit">Place order · @Format.Money(Model.Cart.Total)</button>
+                <p class="summary-note">By placing this order you agree to our delivery &amp; returns policy.</p>
+                <a class="link-arrow" style="display:flex;justify-content:center;margin-top:16px;border:0;" href="/cart">Back to bag <span>→</span></a>
+            </aside>
+        </div>
+    </form>
+</div>

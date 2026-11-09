@@ -1,0 +1,187 @@
+﻿@model HomeViewModel
+@{
+    ViewData["Title"] = "Handcrafted ornaments";
+    var heroImage = "/images/seed/hero.jpg";
+}
+
+<section class="hero">
+    <div class="container hero-grid">
+        <div class="hero-copy">
+            <span class="eyebrow"><span class="spark">✦</span> Handcrafted with love in Dhaka</span>
+            <h1>Ornaments that<br />make you <em>glow.</em></h1>
+            <p class="hero-sub">
+                Tiny pearls, soft gold and a little rose-tinted sparkle. GLOWY ORE makes delicate
+                jewelry for everyday moments — and the ones you'll remember forever.
+            </p>
+            <div class="hero-cta">
+                <a class="btn btn-primary" href="/shop">Shop the collection</a>
+                <a class="btn btn-ghost" href="#story">Our story</a>
+            </div>
+            <div class="hero-points">
+                <div>
+                    <strong>Hypoallergenic</strong>
+                    <span>gentle on skin</span>
+                </div>
+                <div>
+                    <strong>Gift-ready</strong>
+                    <span>every order</span>
+                </div>
+                <div>
+                    <strong>Cash on delivery</strong>
+                    <span>all over Bangladesh</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-visual">
+            <div class="hero-frame">
+                <img src="@heroImage" alt="GLOWY ORE pearl and gold ornaments on blush silk" />
+                <span class="hero-glint g1">✦</span>
+                <span class="hero-glint g2">✦</span>
+                <span class="hero-glint g3">✦</span>
+            </div>
+            <span class="hero-frame-ring" aria-hidden="true"></span>
+            <div class="hero-card">
+                <span class="hero-card-avatar">✦</span>
+                <div>
+                    <strong>1,200+ happy customers</strong>
+                    <span><span class="stars">★★★★★</span> 4.9 average glow</span>
+                </div>
+            </div>
+            <div class="hero-tag">New season<span>Rosé</span></div>
+        </div>
+    </div>
+</section>
+
+<div class="brand-strip" aria-hidden="true">
+    <div class="brand-strip-track">
+        <span>Handcrafted</span><i>✦</i><span>Hypoallergenic</span><i>✦</i><span>Water resistant</span><i>✦</i><span>Gift wrapped</span><i>✦</i><span>Made to glow</span><i>✦</i>
+        <span>Handcrafted</span><i>✦</i><span>Hypoallergenic</span><i>✦</i><span>Water resistant</span><i>✦</i><span>Gift wrapped</span><i>✦</i><span>Made to glow</span><i>✦</i>
+    </div>
+</div>
+
+<section class="section">
+    <div class="container">
+        <div class="section-head" data-reveal>
+            <div>
+                <span class="eyebrow"><span class="spark">✦</span> The collections</span>
+                <h2>Find your little glow.</h2>
+            </div>
+            <p class="lede">Four small collections, one soft pink world. Start with the pieces that feel most like you.</p>
+        </div>
+
+        <div class="category-grid">
+            @{ var catIndex = 0; }
+            @foreach (var category in Model.Categories)
+            {
+                <a class="category-card" href="/category/@category.Slug" data-reveal style="--delay:@(catIndex * 0.08)s">
+                    <img src="/@(category.IconPath ?? "images/placeholder.svg")" alt="@category.Name collection" loading="lazy" />
+                    <span class="category-arrow">→</span>
+                    <div class="category-info">
+                        <span class="category-count">@category.Products.Count(c => c.IsActive) pieces</span>
+                        <h3>@category.Name</h3>
+                        <p>@category.Description</p>
+                    </div>
+                </a>
+                catIndex++;
+            }
+        </div>
+    </div>
+</section>
+
+@if (Model.Featured.Any())
+{
+    <section class="section" style="padding-top: 10px;">
+        <div class="container">
+            <div class="section-head" data-reveal>
+                <div>
+                    <span class="eyebrow"><span class="spark">✦</span> Most loved</span>
+                    <h2>The glow-up edit.</h2>
+                </div>
+                <a class="link-arrow" href="/shop">Shop all ornaments <span>→</span></a>
+            </div>
+
+            <div class="product-grid">
+                @foreach (var product in Model.Featured)
+                {
+                    <partial name="_ProductCard" model="product" />
+                }
+            </div>
+        </div>
+    </section>
+}
+
+<section class="section story" id="story">
+    <div class="container story-grid">
+        <div class="story-visual" data-reveal>
+            <div class="story-frame">
+                <img src="/images/seed/story.jpg" alt="GLOWY ORE pearl necklace in a blush pink gift box" loading="lazy" />
+            </div>
+            <div class="story-seal">
+                Made to<br />glow
+                <span>Est. 2024</span>
+            </div>
+        </div>
+        <div class="story-copy" data-reveal style="--delay:.1s">
+            <span class="eyebrow"><span class="spark">✦</span> Our story</span>
+            <h2>Small ornaments.<br />Big feelings.</h2>
+            <p>
+                GLOWY ORE began with a single pearl pendant and a very simple idea: jewelry shouldn't
+                wait for special occasions. Every piece is designed in small batches, finished by hand
+                and packed in soft pink tissue — ready to make someone's ordinary Tuesday feel golden.
+            </p>
+            <ul class="story-list">
+                <li>Delicate, skin-kind materials that last beyond one season.</li>
+                <li>Small-batch drops — when a piece is gone, it's truly gone.</li>
+                <li>Every order arrives gift-wrapped with a handwritten note card.</li>
+            </ul>
+            <a class="btn btn-primary" href="/shop">Meet the ornaments</a>
+        </div>
+    </div>
+</section>
+
+<section class="section" style="padding-top: 10px;">
+    <div class="container">
+        <div class="section-head center" data-reveal>
+            <div>
+                <span class="eyebrow" style="justify-content:center;"><span class="spark">✦</span> Little love notes</span>
+                <h2>They wore it. They glowed.</h2>
+            </div>
+            <p class="lede">A few words from the GLOWY ORE community — thank you for every tag and every mirror selfie.</p>
+        </div>
+
+        <div class="testimonial-grid">
+            <figure class="testimonial" data-reveal>
+                <span class="stars">★★★★★</span>
+                <blockquote>“The pearl pendant is even prettier in person. I haven't taken it off since it arrived.”</blockquote>
+                <figcaption><span class="avatar">SA</span><span><strong>Sadia A.</strong>Dhaka</span></figcaption>
+            </figure>
+            <figure class="testimonial" data-reveal style="--delay:.08s">
+                <span class="stars">★★★★★</span>
+                <blockquote>“Gifted the earrings to my sister — the packaging alone made her cry. Beautiful quality.”</blockquote>
+                <figcaption><span class="avatar">NR</span><span><strong>Nusrat R.</strong>Chattogram</span></figcaption>
+            </figure>
+            <figure class="testimonial" data-reveal style="--delay:.16s">
+                <span class="stars">★★★★★</span>
+                <blockquote>“Finally a brand that gets tiny details right. My everyday stack is now 100% GLOWY ORE.”</blockquote>
+                <figcaption><span class="avatar">MF</span><span><strong>Maliha F.</strong>Sylhet</span></figcaption>
+            </figure>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="glow-band" data-reveal>
+            <div>
+                <span class="eyebrow"><span class="spark">✦</span> Join the glow list</span>
+                <h2>First dibs on every new drop.</h2>
+                <p>Small-batch collections sell out quickly. Leave your email and we'll whisper when the next one lands.</p>
+            </div>
+            <form class="glow-form" data-newsletter>
+                <input type="email" placeholder="Your email address" aria-label="Email address" required />
+                <button class="btn btn-dark" type="submit">Join</button>
+            </form>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,67 @@
+@model CategoryFormViewModel
+@{
+    ViewData["Title"] = "Edit category";
+    ViewData["AdminTitle"] = "Edit category";
+    ViewData["ActiveAdmin"] = "categories";
+}
+
+<div class="admin-page-head">
+    <p>Update the collection details or add more pictures.</p>
+    <div class="actions">
+        <a class="btn btn-ghost btn-sm" href="/admin/categories">← Back to categories</a>
+    </div>
+</div>
+
+<form class="admin-form" method="post" action="/admin/categories/edit/@Model.Id" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-section">
+        <div class="form-section-head">
+            <h2>Details</h2>
+            <span>Changing the name keeps the same web address.</span>
+        </div>
+        <partial name="_CategoryForm" model="Model" />
+    </div>
+
+    <div class="form-section">
+        <div class="form-section-head">
+            <h2>Pictures</h2>
+            <span>Tick “Remove” on a picture to delete it when you save.</span>
+        </div>
+
+        @if (Model.ExistingImages.Count > 0)
+        {
+            <p style="font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--wine); margin-bottom: 10px;">Current pictures</p>
+            <div class="preview-grid" style="margin-bottom: 18px;">
+                @foreach (var image in Model.ExistingImages)
+                {
+                    <div class="preview-item removable">
+                        <img src="/@image.ImagePath" alt="Category picture" />
+                        <label>
+                            <input type="checkbox" name="RemoveImageIds" value="@image.Id" /> Remove
+                        </label>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <p style="font-size: 12.5px; color: var(--muted); margin-bottom: 14px;">No pictures yet — upload the first one below.</p>
+        }
+
+        <label class="file-drop">
+            <input type="file" name="Images" multiple accept="image/*" data-file-input data-preview="#newCategoryImages" />
+            <span class="drop-icon">＋</span>
+            <strong>Add more pictures</strong>
+            <span>JPG, PNG, WEBP or GIF · up to 6 MB each</span>
+        </label>
+        <span asp-validation-for="Images" class="text-danger"></span>
+        <div class="preview-grid" id="newCategoryImages"></div>
+    </div>
+
+    <div class="form-actions">
+        <button class="btn btn-primary" type="submit">Save changes</button>
+        <a class="btn btn-ghost" href="/admin/categories">Cancel</a>
+    </div>
+</form>

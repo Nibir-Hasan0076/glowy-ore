@@ -1,0 +1,22 @@
+﻿@model ErrorViewModel
+@{
+    ViewData["Title"] = "Something went wrong";
+}
+
+<section class="section">
+    <div class="container">
+        <div class="section-head center">
+            <span class="eyebrow">A little hiccup</span>
+            <h1>Something went wrong</h1>
+            <p class="lede">An error occurred while processing your request. Please try again, or head back to the collection.</p>
+            @if (Model.ShowRequestId)
+            {
+                <p class="lede">Request ID: <code>@Model.RequestId</code></p>
+            }
+            <div class="hero-actions" style="justify-content:center; display:flex; gap:14px; flex-wrap:wrap; margin-top:26px;">
+                <a class="btn btn-dark" asp-controller="Home" asp-action="Index">Back to home</a>
+                <a class="btn btn-ghost" asp-controller="Shop" asp-action="Index">Browse the shop</a>
+            </div>
+        </div>
+    </div>
+</section>

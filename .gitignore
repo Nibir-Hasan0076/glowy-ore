@@ -1,0 +1,24 @@
+bin/
+obj/
+.vs/
+*.user
+*.suo
+
+# local database
+*.db
+*.db-shm
+*.db-wal
+
+# runtime uploads (seeded catalog lives in wwwroot/images)
+wwwroot/uploads/products/
+wwwroot/uploads/categories/
+!wwwroot/uploads/products/.gitkeep
+!wwwroot/uploads/categories/.gitkeep
+
+# design source images
+vibe_images/
+
+# local Windows launcher
+tools/probe-load.fsx
+tools/probe-stream.fsx
+tools/run-app-in-memory.fsx

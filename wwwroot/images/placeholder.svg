@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FDF0F4"/>
+      <stop offset="1" stop-color="#F7CFDC"/>
+    </linearGradient>
+    <linearGradient id="gem" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FBD0DE"/>
+      <stop offset="1" stop-color="#DE7E9C"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="600" fill="url(#bg)"/>
+  <circle cx="300" cy="285" r="120" fill="none" stroke="#E9B7C7" stroke-width="1.5" stroke-dasharray="4 8"/>
+  <path d="M300 190 354 270 300 400 246 270Z" fill="url(#gem)"/>
+  <path d="M300 190 354 270H246Z" fill="#FFF6F9"/>
+  <path d="M300 190v210M246 270l54 130 54-130" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="3"/>
+  <text x="300" y="470" text-anchor="middle" font-family="Georgia, serif" font-size="26" letter-spacing="8" fill="#B25E7C">GLOWY ORE</text>
+</svg>

@@ -1,0 +1,13 @@
+bin/
+obj/
+.git/
+.gitignore
+.vs/
+*.user
+*.db
+*.db-shm
+*.db-wal
+vibe_images/
+tools/probe-load.fsx
+tools/probe-stream.fsx
+tools/run-app-in-memory.fsx

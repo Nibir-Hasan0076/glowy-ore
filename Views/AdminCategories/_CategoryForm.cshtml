@@ -1,0 +1,18 @@
+@model CategoryFormViewModel
+<div class="admin-form-grid">
+    <div class="field">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" placeholder="e.g. Necklaces" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="field">
+        <label asp-for="SortOrder"></label>
+        <input asp-for="SortOrder" type="number" min="0" />
+        <span asp-validation-for="SortOrder" class="text-danger"></span>
+    </div>
+    <div class="field full">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" rows="3" placeholder="A soft line about this collection…"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+</div>
