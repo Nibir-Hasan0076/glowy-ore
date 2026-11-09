@@ -57,10 +57,12 @@ GitHub Pages cannot host this app — it is a server-rendered .NET application w
 
 ### Render (Docker)
 
-1. Create a Render account and connect this GitHub repository.
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Nibir-Hasan0076/glowy-ore)
+
+1. Sign in to Render with GitHub (free plan, no card).
 2. Render reads `render.yaml` and creates the web service.
 3. Enter a strong `Admin__Password` when prompted.
-4. Open the generated `https://*.onrender.com` URL.
+4. Open the generated `https://*.onrender.com` URL. The first visit after a period of inactivity can take about a minute while the free service wakes up.
 
 The free plan uses an ephemeral filesystem, so orders, admin edits and uploaded images reset when the service restarts. For a real store, use the paid Starter plan with a 1 GB disk mounted at `/var/data` and the two environment variables shown above.
 
